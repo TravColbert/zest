@@ -1,0 +1,12 @@
+node_modules
+.env
+.okta.env
+.npmrc
+config/*.json
+config/*.sample
+!config/test.json
+tls
+public/.DS_Store
+public/favicon.zip
+public/about.txt
+db/*.sqlite
