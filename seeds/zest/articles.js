@@ -1,9 +1,16 @@
-const installation = require("./installation.md")
+const { readFile } = require('fs/promises')
+const path = require('path')
+
+const loadFile = async(filePath) => {
+  try {
+    return await readFile(path.join(__dirname, filePath), { encoding: 'utf8' })
+  } catch (err) {
+    console.error(err.message)
+    return ""
+  }
+}
 
 module.exports = async function (db, debug = true) {
-  // Check if target model exists before attempting to create records:
-
-
   /**
    * This include block is used in all seeds in this file.
    * 
@@ -40,7 +47,7 @@ module.exports = async function (db, debug = true) {
     sections: [
       {
         name: 'Basic Installation',
-        text: installation
+        text: await loadFile('installation.md')
       }
     ],
     tags: [
