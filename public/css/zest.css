@@ -1,0 +1,25 @@
+.layout {
+  width: 100%;
+  height: auto;
+
+  display: grid;
+  grid:
+    "header header header" auto
+    "sidebar body alt-sidebar" 1fr
+    "footer footer footer" auto
+    / auto 1fr auto;
+  gap: 8px;
+}
+
+@media (max-width: 700px) {
+  .layout {
+    grid:
+      auto-flow / 1fr 1fr 1fr;
+  }
+}
+
+.header { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.body { grid-area: body; }
+.alt-sidebar { grid-area: alt-sidebar; }
+.footer { grid-area: footer; }

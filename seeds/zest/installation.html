@@ -1,0 +1,72 @@
+<h1>Building and Using Zest</h1>
+
+<h2>Developing Locally</h2>
+
+The easiest way to get started developing your app locally is:
+
+<h3>Create a .env file with local-only settings</h3>
+
+Copy <code>.env.sample</code> to <code>.env</code> and make editions matching your setup.
+
+<h3>Start a Local Node Instance</h3> 
+
+<pre>
+  nvm install --lts
+  nvm use --lts
+  npm i
+  npm run dev
+</pre>
+
+The above initializes your database and tables, but does not populate the database with any seed data. If you want to do that then:
+
+<pre>
+  npm run with-seed
+</pre>
+
+<h3>Start a Local Docker Build</h3>
+
+This will run Node in PRODUCTION mode.
+
+First build an image like this:
+
+<pre>
+  docker build -t _your_app_name_:latest .
+</pre>
+
+For example: 
+
+<pre>
+  docker build -t zest-test:latest .
+</pre>
+
+will build an image tagged as <strong>zest-test</strong>.
+
+Then run:
+
+<pre>
+  docker run -it --env-file .env -p 3000:3000 --name _your_app_name_ _image_name_
+</pre>
+
+For example:
+
+<pre>
+  docker run -it --env-file .env -p 3000:3000 --name zest-test-app zest-test
+</pre>
+
+You might find that adding the <strong>--rm</strong> argument prevents Docker complaints.
+ 
+Above, we call the container <strong>zest-test-app</strong>. This has a writable filesystem such that any local database entries in SQLites, for example, will persist between restarts of your container.
+
+<h4>Restarting a container</h4>
+
+Below would (re)start your container, preserving your app's state (database entries) exactly where you left off.
+
+<pre>
+  docker start zest-test-app
+</pre>
+
+Adding an <strong>-i</strong> makes the container 'interactive', allowing you to see the server's log output on-screen.
+
+<pre>
+  docker start -i zest-test-app
+</pre>

@@ -11,6 +11,43 @@ const loadFile = async(filePath) => {
 }
 
 module.exports = async function (db, debug = true) {
+  const articleConfigs = [
+    {
+      title: 'Zest Home',
+      subtitle: 'Zest - a refreshing way to build performant web apps',
+      sections: [
+        {
+          name: 'Introduction',
+          text: `
+          <p>Welcome to the Zest documentation</p>
+          <p>We think Zest is great and we believe you'll feel the same way too.</p>
+          `
+        }
+      ],
+      tags: [
+        {name: 'documentation'},
+        {name: 'zest'},
+        {name: 'base'},
+      ]
+    },
+    {
+      title: 'Getting Started',
+      slug: 'start',
+      sections: [
+        {
+          name: 'Basic Installation',
+          text: await loadFile('installation.html')
+        }
+      ],
+      tags: [
+        {name: 'documentation'},
+        {name: 'zest'},
+        {name: 'base'},
+        {name: 'installation'},
+      ]
+    }
+  ]
+
   /**
    * This include block is used in all seeds in this file.
    * 
@@ -22,39 +59,18 @@ module.exports = async function (db, debug = true) {
       db.models.tags
     ]
   }
-  await db.models.articles?.create({
-    title: 'Zest Home',
-    subtitle: 'Zest - a refreshing way to build performant web apps',
-    sections: [
-      {
-        name: 'Introduction',
-        text: `
-        <p>Welcome to the Zest documentation</p>
-        <p>We think Zest is great and we believe you'll feel the same way too.</p>
-        `
-      }
-    ],
-    tags: [
-      {name: 'documentation'},
-      {name: 'zest'},
-      {name: 'base'},
-    ]
-  }, standardArticleInclude)
+  
+  let articleQueue = articleConfigs.map((articleConfig) => {
+    return async () => {
+      console.debug("\n\t\tINSERTING ARTICLE\n")
+      await db.models.articles?.create(articleConfig, standardArticleInclude)
+    }
+  })
 
-  await db.models.articles?.create({
-    title: 'Getting Started',
-    slug: 'start',
-    sections: [
-      {
-        name: 'Basic Installation',
-        text: await loadFile('installation.md')
-      }
-    ],
-    tags: [
-      {name: 'documentation'},
-      {name: 'zest'},
-      {name: 'base'},
-      {name: 'installation'},
-    ]
-  }, standardArticleInclude)
+  // TODO: Not sure why this doesn't work:
+  // await Promise.all(articleQueue)
+
+  articleQueue.forEach(async articleFunction => {
+    await articleFunction()
+  })
 }
