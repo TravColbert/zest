@@ -2,12 +2,12 @@ const Page = require('../lib/Page')
 
 module.exports = class extends Page {
   linksTop = /* html */ `
-  <link rel="stylesheet" href="/css/zest.css">
+    <link rel="stylesheet" href="/css/zest.css">
   `
 
   metaTop = /* html */ `
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="cyan" />
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="cyan" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="black" />
   `
 
   htmlClasses = 'has-navbar-fixed-top'
