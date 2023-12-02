@@ -90,8 +90,6 @@
 
   .alt-sidebar {
     display: none; 
-    grid-area: alt-sidebar; 
-    background-color: #ff6361;
   }  
 }
 
@@ -125,8 +123,6 @@
 
   .alt-sidebar {
     display: none; 
-    grid-area: alt-sidebar; 
-    background-color: #ff6361;
   }  
 }
 
