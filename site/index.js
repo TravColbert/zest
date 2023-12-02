@@ -3,6 +3,7 @@ const Page = require('../lib/Page')
 module.exports = class extends Page {
   linksTop = /* html */ `
     <link rel="stylesheet" href="/css/zest.css">
+    <link rel="stylesheet" href="/css/normalize.css">
   `
 
   metaTop = /* html */ `
