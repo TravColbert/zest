@@ -62,7 +62,6 @@ module.exports = async function (db, debug = true) {
   
   let articleQueue = articleConfigs.map((articleConfig) => {
     return async () => {
-      console.debug("\n\t\tINSERTING ARTICLE\n")
       await db.models.articles?.create(articleConfig, standardArticleInclude)
     }
   })
@@ -70,6 +69,7 @@ module.exports = async function (db, debug = true) {
   // TODO: Not sure why this doesn't work:
   // await Promise.all(articleQueue)
 
+  // have to use this instead:
   articleQueue.forEach(async articleFunction => {
     await articleFunction()
   })

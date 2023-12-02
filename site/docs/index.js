@@ -111,18 +111,22 @@ module.exports = class extends Page {
     <!-- End Sidebar -->
   `
 
-  altSidebar = /* html */ `
-    <!-- AltSidebar -->
-    <aside id="documentation-sections" class="document-menu">
-      <ul class="menu-list">
-        {{articleSectionsMenu}}
-      </ul>
-    </aside>
-  `
+  altSidebar = (req, res) => {
+    if (!this.articles[0]) return '<div class="error">no sections found</div>'
+    return /* html */ `
+      <!-- AltSidebar -->
+      <aside id="documentation-sections" class="document-menu">
+        <ul class="menu-list">
+          {{articleSectionsMenu}}
+        </ul>
+      </aside>
+      <!-- End AltSidebar -->
+    `
+  }
 
   // We override body to account for the new nav components
   body = /* html */ `
-    <div class="layout">
+    <div class="documentation-layout">
       {{mainNav}}
       <div class="sidebar">
         {{sidebar}}
@@ -181,6 +185,7 @@ module.exports = class extends Page {
   }
 
   articleSectionsMenu = (req, res) => {
+    if (!this.articles[0]) return 
     return this.articles[0].sections.reduce((sectionString, section) => {
       return `${sectionString}<a href="#${this.articles[0].slug}-${section.anchor}">${section.name}</a>`
     }, '')
@@ -213,7 +218,7 @@ module.exports = class extends Page {
 
     this.articles = await this.fetchArticlesSearch(res, fetchArticlesSearchObj)
 
-    if (!this.articles.length) this.main = 'no article found'
+    if (!this.articles.length) this.main = '<div class="error">no article found</div>'
 
     super._get(req, res, next)
   }
