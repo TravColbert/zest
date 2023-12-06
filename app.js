@@ -1,6 +1,49 @@
 'use strict'
 
 module.exports = function(explicitConfig = {}) {
+  /**
+   * We configure Zest through 4 ways - all of them converge at different 
+   * points:
+   * 
+   *  - explicit config ---------------------+
+   *                                         |
+   *  - environment (sh) --+-- process.env --+
+   *                       |                 |
+   *  - .env (file) -------+                 +-- app.locals (final config)
+   *                                         |
+   *  - config file -------------------------+
+   * 
+   * The exlicit config is when you pass a configuration JSON string to the 
+   * appFactory, like this: 
+   * 
+   *   appFactory({ APP_TITLE: 'Sample App' })
+   * 
+   * Otherwise, Zest looks to Node's process.env property to configure itself.
+   * There are 2 ways you can set the process.env property: shell or .env file.
+   *  
+   * The shell environment config is whatever variable the shell environement 
+   * is set to. For example:
+   * 
+   *   export APP_TITLE='Sample App' && node server.js
+   * 
+   * You can also set the shell environment in your package.json like this:
+   * 
+   *  "scripts": {
+   *    "test": "APP_TITLE='Sample App' node server.js"
+   *  },
+   * 
+   * A .env file may also be used. The dotenv package will read the .env file 
+   * and insert those values into process.env. Here is the contents of an 
+   * equivelant .env file:
+   * 
+   *   APP_TITLE=Sample App
+   * 
+   * The .env file is parsed and merged into the process.env attribute.
+   * 
+   * Finally, a config file is retrieved.
+   * 
+   * The process.env and config files are merged into the app.locals.
+   */
   require('dotenv').config()
   const path = require('path')
   const config = require('config')
@@ -22,11 +65,11 @@ module.exports = function(explicitConfig = {}) {
    */
   const getConfigValue = function(valueKey, defaultValue, showValue = false) {
     let value = defaultValue
-    if (valueKey in explicitConfig) {
+    if (valueKey in explicitConfig) {     // config in explicit config?
       value = explicitConfig[valueKey]
-    } else if (valueKey in process.env) {
+    } else if (valueKey in process.env) { // config in process.env (shell environment)?
       value = process.env[valueKey]
-    } else if (valueKey in config) {
+    } else if (valueKey in config) {      // config in config file?
       value = config[valueKey]
     }
     showValue && console.debug(` config: ${valueKey} => ${value}`)
