@@ -191,36 +191,27 @@ module.exports = class extends Page {
     }, '')
   }
 
-  async _get (req, res, next) {
-    const fetchArticlesSearchObj = {
-      where: {},
-      limit: res.locals.limit,
-      offset: res.locals.page,
-      order: [
-        ['createdAt', 'DESC']
-      ]
-    }
-  
+  async _get (req, res, next) {  
     // this.pathParams = this.parsePathParams(req, res, __dirname)
     console.debug(`PATHPARAMS: \t\t${JSON.stringify(res.locals.pathParams)}`)
     
-    fetchArticlesSearchObj.include = [
+    this.modelSearchParams.include = [
       req.app.locals.db.zest.models.sections,
       req.app.locals.db.zest.models.tags
     ]
 
     if (!res.locals.pathParams.length) {
-      fetchArticlesSearchObj.where.slug = 'Zest-Home'
+      this.modelSearchParams.where.slug = 'Zest-Home'
     } else {
       console.debug(`NAME: ${res.locals.pathParams[0]}`)
-      fetchArticlesSearchObj.where.slug = res.locals.pathParams[0]
+      this.modelSearchParams.where.slug = res.locals.pathParams[0]
     }
 
-    this.articles = await this.fetchArticlesSearch(res, fetchArticlesSearchObj)
+    this.articles = await this.fetchArticlesSearch(res, this.modelSearchParams)
 
     if (!this.articles.length) this.main = '<div class="error">no article found</div>'
 
-    super._get(req, res, next)
+    await super._get(req, res, next)
   }
   
   async index (res) {
