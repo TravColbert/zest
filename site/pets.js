@@ -7,15 +7,9 @@
  * our web app. So, we only have to redefine what is necessary from 
  * page to page. 
  */
-const Page = require('./index')
+const Page = require('../lib/Page')
 
 module.exports = class extends Page {
-  // We update the 'body' to include a list of pets
-  body = /* html */ `
-    <h1>Hello Zest!</h1>
-    <div>{{modelTable}}</div>
-  `
-
   /**
    * We have requested a thing called 'modelList', above. We could have named 
    * it anything, it's just either a:
