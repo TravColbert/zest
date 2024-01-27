@@ -10,7 +10,21 @@ beforeAll(() => {
   jest.spyOn(console, 'debug').mockImplementation(jest.fn())
 })
 
-describe('App can be configured', () => {
+// describe('App can be configured through shell environment', () => {
+//   // Make a copy of current environment
+//   const OLD_ENV = process.env
+
+//   beforeEach(() => {
+//     jest.resetModules() // Most important - it clears the cache
+//     process.env = { ...OLD_ENV } // Make a copy
+//   })
+
+//   afterAll(() => {
+//     process.env = OLD_ENV // Restore old environment
+//   })
+// })
+
+describe('App can be configured explicitly through factory', () => {
   test('Can be configured through factory', async () => {
     const app = await appFactory({ APP_TITLE: 'Test App' })
     expect(app.locals.appTitle).toBe('Test App')
@@ -143,6 +157,29 @@ describe('Test path params', () => {
   })
 })
 
+describe('Test GETs', () => {
+  test('GET to pets return list of pets', async () => {
+    const app = await appFactory({ NODE_ENV: 'demo' })
+    const res = await request(app).get('/_tests_/pets')
+    const dom = HTMLParser.parse(res.text)
+    const content = dom.querySelector('#pets_2_name').innerHTML
+    expect(content).toBe('Spot')
+  })
+})
+
+describe('Test POSTs', () => {
+  test('POST to pets returns updated list of pets', async () => {
+    const app = await appFactory()
+    let res = await request(app)
+      .post('/_tests_/pets/')
+      .send({pets: {name: 'Muffin'}})
+      .set('Accept', 'application/json')
+    res = await request(app).get('/_tests_/pets')
+    const dom = HTMLParser.parse(res.text)
+    const content = dom.querySelector('#pets_4_name').innerHTML
+    expect(content).toBe('Muffin')
+  })
+})
 // const showPage = (res) => {
 //   console.dir(res.text)
 //   console.dir(res.headers)

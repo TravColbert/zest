@@ -7,7 +7,7 @@
  * our web app. So, we only have to redefine what is necessary from 
  * page to page. 
  */
-const Page = require('../lib/Page')
+const Page = require('../../lib/Page')
 
 module.exports = class extends Page {
   /**

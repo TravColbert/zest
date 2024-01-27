@@ -191,27 +191,16 @@ module.exports = class extends Page {
     }, '')
   }
 
-  async _get (req, res, next) {  
+  async _get (req, res, next) { 
+    await super._get(req, res, next)
+
     // this.pathParams = this.parsePathParams(req, res, __dirname)
     console.debug(`PATHPARAMS: \t\t${JSON.stringify(res.locals.pathParams)}`)
     
-    this.modelSearchParams.include = [
-      req.app.locals.db.zest.models.sections,
-      req.app.locals.db.zest.models.tags
-    ]
+    // this.articles = await this.fetchArticlesSearch(res, this.modelSearchParams)
 
-    if (!res.locals.pathParams.length) {
-      this.modelSearchParams.where.slug = 'Zest-Home'
-    } else {
-      console.debug(`NAME: ${res.locals.pathParams[0]}`)
-      this.modelSearchParams.where.slug = res.locals.pathParams[0]
-    }
+    // if (!this.articles.length) this.main = '<div class="error">no article found</div>'
 
-    this.articles = await this.fetchArticlesSearch(res, this.modelSearchParams)
-
-    if (!this.articles.length) this.main = '<div class="error">no article found</div>'
-
-    await super._get(req, res, next)
   }
   
   async index (res) {

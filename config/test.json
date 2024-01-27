@@ -1,3 +1,10 @@
 {
-  "DEBUG": true
+  "DEBUG": false,
+  "DB_CONFIG": {
+    "demo": {
+      "dialect": "sqlite",
+      "verbose": true,
+      "dbConfig": "sqlite::memory"
+    }
+  }
 }
