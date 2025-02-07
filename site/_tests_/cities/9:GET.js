@@ -2,7 +2,6 @@ const Page = require('./index')
 
 module.exports = class extends Page {
   addOn = /* html */ `
-    <div id="addOn">Additional Markup</div>
-    {{list}}
+    <div id="addOn">Lusaka</div>
   `
 }

@@ -1,0 +1,14 @@
+module.exports = {
+  definition: async function (db, DataTypes) {
+    db.define("cities", {
+      name: DataTypes.STRING,
+      population: DataTypes.INTEGER,
+      longitude: DataTypes.STRING,
+      latitude: DataTypes.STRING,
+      picture: DataTypes.BLOB,
+    })
+  },
+  postDefinition: async function (db, DataTypes, Op) {
+    db.models.cities.belongsTo(db.models.continents)
+  },
+}

@@ -6,10 +6,11 @@ describe('DB can be created through Sequelize', () => {
     const dbConfig = {
       "zest": {
         "dialect": "sqlite",
-        "dbConfig": "sqlite::memory"
+        "dbConfig": "sqlite::memory",
+        "logging": false,
       }
     }
-    const db = await zestDb(dbConfig, 'test')
+    const db = await zestDb(dbConfig, 'test', false)
     const dbSources = Object.keys(db)
     expect(dbSources.length).toBe(1)
     expect(dbSources).toContain('zest')

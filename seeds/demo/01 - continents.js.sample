@@ -1,0 +1,8 @@
+module.exports = async function (db, debug = true) {
+  await db.models.continents?.create({
+    name: "North America",
+  })
+  await db.models.continents?.create({
+    name: "Asia",
+  })
+}

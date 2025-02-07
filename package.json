@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
-    "demo": "NODE_ENV=demo nodemon server.js",
+    "dev": "DEBUG=true nodemon server.js",
+    "demo": "NODE_ENV=demo AUTHENTICATE=demo DEBUG=true nodemon server.js",
     "sample": "APP_TITLE='Sample' node server.js",
     "test": "jest",
     "test-watch": "jest --watch --noStackTrace"
@@ -32,6 +32,7 @@
     "memorystore": "^1.6.7",
     "morgan": "^1.10.0",
     "passport": "^0.6.0",
+    "passport-custom": "^1.1.1",
     "passport-openidconnect": "^0.1.1",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",

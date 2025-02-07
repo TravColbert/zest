@@ -1,4 +1,5 @@
 const Page = require('../clone')
+// const pageLocation = require('../../lib/zest-page-helpers')
 
 module.exports = class extends Page {
   listOfThings = [

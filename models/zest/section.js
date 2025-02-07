@@ -2,7 +2,6 @@ var slugify = require('slugify')
 
 module.exports = {
   definition: async function (db, DataTypes) {
-    console.log('  applying definition for Sections...')
     db.define('sections', {
       name: {
         type: DataTypes.STRING,

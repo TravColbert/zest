@@ -39,6 +39,10 @@ describe('App can be configured explicitly through factory', () => {
 })
 
 describe('Test the root path', () => {
+//   beforeEach(() => {
+//      const app = await appFactory()
+//   })
+
   test('It should respond to the GET method', async () => {
     const app = await appFactory()
     const res = await request(app).get('/')
@@ -180,6 +184,30 @@ describe('Test POSTs', () => {
     expect(content).toBe('Muffin')
   })
 })
+
+describe('Test Authentication', () => {
+  test('Test sample auth', async () => {
+    /**
+     * We pass the AUTHENTICATE variable the library in /auth/ that we want to
+     * use for authentication. Here we pass 'sample' which corresponds to 
+     * ./auth/sample.js which loads passport local authentication with sample
+     * user db included in the file
+     */
+    const app = await appFactory({ APP_TITLE: 'Sample Authentication App', AUTHENTICATE: 'local', DEBUG: true })
+    expect(app.locals.appTitle).toBe('Sample Authentication App')
+    const res = await request(app).get('/_tests_/a/auth')
+    console.info(res.text)
+    // const dom = HTMLParser.parse(res.text)
+    // const content = dom.querySelector('#addOn').innerHTML
+    // expect(content).toBe('x:y:z')
+  })
+  test('Test OKTA OIDC ', async () => {
+    // We pass the AUTHENTICATE variable the library in /auth/ that we want to use for authentication
+    const app = await appFactory({ APP_TITLE: 'Test App', AUTHENTICATE: 'oidc' })
+    expect(app.locals.appTitle).toBe('Test App')
+  })
+})
+
 // const showPage = (res) => {
 //   console.dir(res.text)
 //   console.dir(res.headers)

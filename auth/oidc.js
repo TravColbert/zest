@@ -2,6 +2,9 @@ const passport = require('passport')
 const { Strategy } = require('passport-openidconnect')
 
 module.exports = function (app) {
+  // Disable authentication routines if !authenticate
+  if (!app.locals.authenticate) return
+  
   // Set up authentication
   app.use(passport.initialize())
   app.use(passport.session())

@@ -1,0 +1,23 @@
+module.exports = async function (db, debug = true) {
+  const newYork = await db.models.cities?.create({
+    name: "New York",
+    population: 8800000,
+    longitude: "40.713055360998816",
+    latitude: "-74.00613677530805",
+  })
+
+  await newYork.setContinent(
+    await db.models.continents?.findOne({ where: { name: "North America" } })
+  )
+
+  const barcelona = await db.models.cities?.create({
+    name: "Tel Aviv",
+    population: 474530,
+    longitude: "32.08059428130675",
+    latitude: "34.78059298554436",
+  })
+
+  await barcelona.setContinent(
+    await db.models.continents?.findOne({ where: { name: "Asia" } })
+  )
+}
