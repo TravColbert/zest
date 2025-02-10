@@ -39,32 +39,28 @@ describe('App can be configured explicitly through factory', () => {
 })
 
 describe('Test the root path', () => {
-//   beforeEach(() => {
-//      const app = await appFactory()
-//   })
+  var app
 
-  test('It should respond to the GET method', async () => {
-    const app = await appFactory()
+  beforeEach(async () => {
+    app = await appFactory({ AUTHENTICATE: "none" })
+  })
+
+  test('It should respond correctly to the GET method', async () => {
     const res = await request(app).get('/')
     expect(res.statusCode).toBe(200)
-  })
-
-  test('x-powered-by should not be there', async () => {
-    const app = await appFactory()
-    const res = await request(app).get('/')
     expect(res.header['x-powered-by']).toBeUndefined()
-  })
-
-  test('Content-type should be text/html', async () => {
-    const app = await appFactory()
-    const res = await request(app).get('/')
     expect(res.header['content-type']).toBe('text/html; charset=utf-8')
   })
 })
 
 describe('Test class rendering', () => {
+  var app
+
+  beforeEach(async () => {
+    app = await appFactory({ AUTHENTICATE: "none" })
+  })
+
   test('It should render the index page', async () => {
-    const app = await appFactory()
     const res = await request(app).get('/_tests_/')
     const dom = HTMLParser.parse(res.text)
     const content = dom.querySelector('body > h1').innerHTML
@@ -72,7 +68,6 @@ describe('Test class rendering', () => {
   })
 
   test('Index should have an extra div with placeholder', async () => {
-    const app = await appFactory()
     const res = await request(app).get('/_tests_/')
     const dom = HTMLParser.parse(res.text)
     const content = dom.querySelector('body > div').innerHTML
@@ -80,7 +75,6 @@ describe('Test class rendering', () => {
   })
 
   test('Clone should render the inherited index page', async () => {
-    const app = await appFactory()
     const res = await request(app).get('/_tests_/clone')
     const dom = HTMLParser.parse(res.text)
     const content = dom.querySelector('body > h1').innerHTML
@@ -88,10 +82,9 @@ describe('Test class rendering', () => {
   })
 
   test('Clone should render the addon div', async () => {
-    const app = await appFactory()
     const res = await request(app).get('/_tests_/clone')
     const dom = HTMLParser.parse(res.text)
-    const content = dom.querySelector('#addon').innerHTML
+    const content = dom.querySelector('#addOn').innerHTML
     expect(content).toBe('Additional Markup')
   })
 })
@@ -143,7 +136,7 @@ describe('Control when a 404 is fired', () => {
   })
 })
 
-describe('Test authentication', () => {
+describe('Test base authentication', () => {
   test('authenticate flag triggers 302', async () => {
     const app = await appFactory()
     const res = await request(app).get('/_tests_/a/auth')
@@ -176,7 +169,7 @@ describe('Test POSTs', () => {
     const app = await appFactory()
     let res = await request(app)
       .post('/_tests_/pets/')
-      .send({pets: {name: 'Muffin'}})
+      .send({ pets: { name: 'Muffin' } })
       .set('Accept', 'application/json')
     res = await request(app).get('/_tests_/pets')
     const dom = HTMLParser.parse(res.text)

@@ -269,13 +269,13 @@ module.exports = function (explicitConfig = {}) {
             )
           if (fs.existsSync(authenticatorPath)) {
             authenticator = require(authenticatorPath)(app)
-            app.locals.debug &&
-              console.debug(`🟢 authenticator found at: ${authenticatorPath}`)
+            app.locals.debug && console.debug(`🟢 authenticator found at: ${authenticatorPath}`)
           } else {
             throw new Error(`🔴 authenticator path not found`)
           }
         } else {
-          throw new Error(`🔴 no authentication module defined`)
+          // throw new Error(`🔴 no authentication module defined`)
+          console.debug(`🔴 no authentication module defined`)
         }
 
         // Set up Zest
