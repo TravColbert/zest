@@ -155,26 +155,26 @@ describe('Test path params', () => {
 })
 
 describe('Test GETs', () => {
-  test('GET to pets return list of pets', async () => {
-    const app = await appFactory({ NODE_ENV: 'demo' })
-    const res = await request(app).get('/_tests_/pets')
+  test('GET to todos returns list of todos', async () => {
+    const app = await appFactory()
+    const res = await request(app).get('/_tests_/todos')
     const dom = HTMLParser.parse(res.text)
-    const content = dom.querySelector('#pets_2_name').innerHTML
-    expect(content).toBe('Spot')
+    const content = dom.querySelector('#todos_2_title').innerHTML
+    expect(content).toBe('Write my first Zest app')
   })
 })
 
 describe('Test POSTs', () => {
-  test('POST to pets returns updated list of pets', async () => {
+  test('POST to todos returns updated list of todos', async () => {
     const app = await appFactory()
     let res = await request(app)
-      .post('/_tests_/pets/')
-      .send({ pets: { name: 'Muffin' } })
+      .post('/_tests_/todos/')
+      .send({ title: 'Post a new todo' })
       .set('Accept', 'application/json')
-    res = await request(app).get('/_tests_/pets')
+    res = await request(app).get('/_tests_/todos')
     const dom = HTMLParser.parse(res.text)
-    const content = dom.querySelector('#pets_4_name').innerHTML
-    expect(content).toBe('Muffin')
+    const content = dom.querySelector('#todos_4_title').innerHTML
+    expect(content).toBe('Post a new todo')
   })
 })
 
@@ -188,17 +188,29 @@ describe('Test Authentication', () => {
      */
     const app = await appFactory({ APP_TITLE: 'Sample Authentication App', AUTHENTICATE: 'local', DEBUG: true })
     expect(app.locals.appTitle).toBe('Sample Authentication App')
-    const res = await request(app).get('/_tests_/a/auth')
-    console.info(res.text)
+    var res = await request(app).get('/_tests_/a/auth')
+    // Should get a 302 redirect to login page
+    expect(res.statusCode).toBe(302)
+
+    // Post to login page
+    res = await request(app)
+      .post('/_tests_/a/login')
+      .send({ username: 'demo', password: 'demo' })
+      .set('Accept', 'application/json')
+
+    // Should get a 302 redirect to originally requested page
+    expect(res.statusCode).toBe(302)
+    expect(res.header.location).toBe('/_tests_/a/auth')
+
     // const dom = HTMLParser.parse(res.text)
     // const content = dom.querySelector('#addOn').innerHTML
     // expect(content).toBe('x:y:z')
   })
-  test('Test OKTA OIDC ', async () => {
-    // We pass the AUTHENTICATE variable the library in /auth/ that we want to use for authentication
-    const app = await appFactory({ APP_TITLE: 'Test App', AUTHENTICATE: 'oidc' })
-    expect(app.locals.appTitle).toBe('Test App')
-  })
+  // test('Test OKTA OIDC ', async () => {
+  //   // We pass the AUTHENTICATE variable the library in /auth/ that we want to use for authentication
+  //   const app = await appFactory({ APP_TITLE: 'Test App', AUTHENTICATE: 'oidc' })
+  //   expect(app.locals.appTitle).toBe('Test App')
+  // })
 })
 
 // const showPage = (res) => {

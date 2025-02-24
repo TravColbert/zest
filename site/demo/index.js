@@ -133,7 +133,7 @@ module.exports = class extends Page {
    * Template blocks can either be am HTML string or a function that
    * returns an HTML string.
    */
-  todoForm = `
+  todoForm = /* html */ `
       <input 
         type="text" 
         id="title" 
@@ -230,23 +230,20 @@ module.exports = class extends Page {
   `
 
   pagination = (req, res) => {
-    return /* html */ `<div class="pagination">{{paginationPrev}}${
-      res.locals.page + 1
-    }{{paginationNext}}</div>`
+    return /* html */ `<div class="pagination">{{paginationPrev}}${res.locals.page + 1
+      }{{paginationNext}}</div>`
   }
 
   paginationPrev = (req, res) => {
     return res.locals.page
-      ? /* html */ `<div><a href="${req.path}?page=${
-          res.locals.page - 1
-        }">prev</a></div>`
+      ? /* html */ `<div><a href="${req.path}?page=${res.locals.page - 1
+      }">prev</a></div>`
       : ""
   }
 
   paginationNext = (req, res) => {
-    return /* html */ `<div><a href="${req.path}?page=${
-      res.locals.page + 1
-    }">next</a></div>`
+    return /* html */ `<div><a href="${req.path}?page=${res.locals.page + 1
+      }">next</a></div>`
   }
 
   simpleLocalDate = dateString => {

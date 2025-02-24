@@ -51,7 +51,7 @@ module.exports = function (explicitConfig = {}) {
   const express = require("express")
   const session = require("express-session")
   const MemoryStore = require("memorystore")(session)
-
+  const bodyParser = require('body-parser')
   /**
    * Searches through all possible configuration sources to set up Zest
    *
@@ -250,7 +250,9 @@ module.exports = function (explicitConfig = {}) {
         // serve static files
         app.use(express.static(app.locals.publicRoot))
         // parse body params
-        app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+        // app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+        app.use(bodyParser.json())
+        app.use(bodyParser.urlencoded({ extended: true }))
 
         const errorHandler = require("./lib/500")
         const notFoundHandler = require("./lib/404")

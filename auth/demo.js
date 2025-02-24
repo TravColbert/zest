@@ -13,14 +13,14 @@ module.exports = function (app) {
   if (!app.locals.authenticate) {
     return
   }
-  
+
   // Set up authentication
   app.use(passport.initialize())
   app.use(passport.session())
 
   // Setup Passport for custom strategy
-  passport.use('demo', new Strategy(  
-    function(req, done) {
+  passport.use('demo', new Strategy(
+    function (req, done) {
       const user = Users.find(u => {
         return (u.username === req.body.username && u.password === req.body.password)
       })

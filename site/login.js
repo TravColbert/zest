@@ -27,13 +27,12 @@ module.exports = class extends Page {
   //   this.authenticator.authenticate(res.app.locals.authenticate)(req, res, next)
   // }
 
-  async _post (req, res, next) {
+  async _post(req, res, next) {
     // console.log(req.body.username)
     // console.log(req.body.password)
     // console.log(res.app.locals.authenticate)
     this.authenticator.authenticate(res.app.locals.authenticate)(req, res, next)
-    // console.log(`**** req.originalUrl`)
-    // console.dir(req.originalUrl)
-    // res.redirect(req.session.originalRequest)
+    console.dir(`REDIRECTING TO: ${req.session.originalRequest}`)
+    return res.redirect(req.session.originalRequest)
   }
 }
