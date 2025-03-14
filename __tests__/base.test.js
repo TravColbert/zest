@@ -118,6 +118,7 @@ describe('Test a bogus path', () => {
     expect(res.statusCode).toBe(404)
   })
 
+  // Should probably respond with a redirect 302 to the root
   test('It should respond with a 200', async () => {
     const app = await appFactory()
     const res = await request(app).get('/bogus')
